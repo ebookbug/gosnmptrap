@@ -3,14 +3,16 @@ package gosnmptrap
 
 import (
 	"fmt"
+	"net"
 	"github.com/cdevr/WapSNMP"
 )
 
 type Trap struct{
+	Address string
 	Version int16
 	Community string
-	GeneralTrap int32
-	SpeicalTrap int32
+	GeneralTrap int16
+	SpeicalTrap int16
 	EnterpriseId string
 	Values map[string]interface{}
 }
@@ -20,10 +22,8 @@ func ParseUdp(data []byte) (Trap,error){
 	seq,err := wapsnmp.DecodeSequence(data)
 	if err !=nil{
 		fmt.Println(err)
+		return trap,err
 	}
-//	for i:=0;i<len(seq);i++{
-//		fmt.Println(seq[i])
-//	}
 	
 	var community string
 	snmpVer := seq[1].(int64)
@@ -50,10 +50,10 @@ func ParseUdp(data []byte) (Trap,error){
 	var varbinds []interface{}
 	
 	if snmpVer==1{
-		fmt.Printf("OID: %s\n",vrsp[1])
-		fmt.Printf("Agent Address: %s\n",vrsp[2])
-		fmt.Printf("Generic Trap: %d\n",vrsp[3])
-		fmt.Printf("Special Trap: %d\n",vrsp[4])
+		trap.GeneralTrap = int16(vrsp[3].(int64))
+		trap.SpeicalTrap = int16(vrsp[4].(int64))
+		trap.EnterpriseId = vrsp[1].(wapsnmp.Oid).String()
+		trap.Address = vrsp[2].(net.IP).String()
 		varbinds = vrsp[6].([]interface{})
 	}else{
 		varbinds = vrsp[4].([]interface{})
@@ -67,7 +67,6 @@ func ParseUdp(data []byte) (Trap,error){
 		
 		trap.Values[varoid.String()] = result
 	}
-	fmt.Printf("\n");
 	
 	return trap,nil
 }
