@@ -12,7 +12,8 @@ By now,gosnmptrap suppport
 ## install
 
 The easiest way to install is via go get:
-	>go get go get github.com/ebookbug/gosnmptrap
+	
+    go get go get github.com/ebookbug/gosnmptrap
 	
 ## license
 
