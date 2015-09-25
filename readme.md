@@ -1,8 +1,8 @@
-# gosnmptrap:Golang implement for SNMP Trap
+# Golang implement for SNMP Trap
 
 gosnmptrap is an open-source SNMP Trap Server library for Go(Golang).
 
-This allow you setup a Trap Server to receivie traps from your device such as Cisco switch.
+This allow you setup a Trap Server to receive traps from your device such as Cisco switch.
 
 By now,gosnmptrap suppport
 
