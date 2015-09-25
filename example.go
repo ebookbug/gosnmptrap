@@ -16,6 +16,13 @@ func main() {
 		panic(err)
 	}
 	defer socket.Close()
+	
+	for{
+		buf := make([]byte,2048)
+		read,from,_:=socket.ReadFromUDP(buf)
+		fmt.Println("Get msg from ",from.IP)
+		go HandleUdp(buf[:read])
+	}
 }
 
 func HandleUdp(data []byte){
